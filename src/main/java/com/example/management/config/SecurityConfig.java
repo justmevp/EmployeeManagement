@@ -1,5 +1,6 @@
 package com.example.management.config;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -18,6 +19,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import com.example.management.filter.CsrfCookiesFilter;
+import com.example.management.filter.JwtTokenGeneratorFilter;
+import com.example.management.filter.JwtTokenValidatiorFilter;
 import com.example.management.filter.AuthoritiesLoggingfAfterFilter;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,31 +32,33 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
         requestHandler.setCsrfRequestAttributeName("_csrf");
-        httpSecurity.securityContext().requireExplicitSave(false)
-        .and().sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+        httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
         .cors().configurationSource(new CorsConfigurationSource() {
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest httpServletRequest) {
                 CorsConfiguration config = new CorsConfiguration();
                 config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
                 config.setAllowedMethods(Collections.singletonList("*"));
-                config.setAllowedHeaders(Collections.singletonList("*"));
                 config.setAllowCredentials(true);
+                config.setAllowedHeaders(Collections.singletonList("*")); 
+                config.setExposedHeaders(Arrays.asList("Authorization"));
                 config.setMaxAge(3600L);
-                return config;
+                return config;  
             }
         }).and().csrf((csrf) -> csrf.csrfTokenRequestHandler(requestHandler)
         .ignoringRequestMatchers("/api/users/add")
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterAfter(new CsrfCookiesFilter(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new AuthoritiesLoggingfAfterFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new JwtTokenGeneratorFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new JwtTokenValidatiorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests()
-                .requestMatchers("/welcome").permitAll()
-                .requestMatchers("/swagger-ui/**").permitAll()
-                .requestMatchers("/v3/api-docs/**").permitAll()
                 .requestMatchers("/api/employees/add").hasRole("ADMIN")
                 .requestMatchers("/api/users").authenticated()
-                .requestMatchers("/api/users/add").permitAll()  
+                .requestMatchers("/api/users/add").permitAll() 
+                .requestMatchers("/welcome").permitAll()
+                .requestMatchers("/swagger-ui/**").permitAll()
+                .requestMatchers("/v3/api-docs/**").permitAll()  
                 .and().formLogin()
                 .and().httpBasic();
 

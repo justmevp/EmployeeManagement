@@ -1,21 +1,28 @@
 package com.example.management.config;
 
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.info.Contact;
-import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.info.License;
-
 @Configuration
-@OpenAPIDefinition(info = @Info(title = "Management API ", // Tiêu đề API
-        version = "Version 1.0", // Phiên bản API
-        contact = @Contact(name = "justmevp", // Tên người liên hệ
-                email = "vpek215@gmail.com", // Email liên hệ
-                url = "http://localhost:8080/swagger-ui/index.html" // URL liên hệ
-        ), license = @License(name = "Apache 2.0", // Tên giấy phép sử dụng
-                url = "https://www.apache.org/license/LICENSE-2.0" // URL đến giấy phép
-        ), termsOfService = "http://localhost:8080/swagger-ui/index.html", description = "Employee Management Demo by VP"))
 public class SwaggerConfig {
 
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Employee Management API")
+                        .version("1.0")
+                        .description("API for managing employees"))
+                .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
+                .schemaRequirement("Bearer Authentication", 
+                    new SecurityScheme()
+                        .name("Authorization")
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT"));
+    }
 }
