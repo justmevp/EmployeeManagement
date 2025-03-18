@@ -18,6 +18,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import com.example.management.filter.CsrfCookiesFilter;
+import com.example.management.filter.AuthoritiesLoggingfAfterFilter;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -45,6 +46,7 @@ public class SecurityConfig {
         .ignoringRequestMatchers("/api/users/add")
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterAfter(new CsrfCookiesFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new AuthoritiesLoggingfAfterFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests()
                 .requestMatchers("/welcome").permitAll()
                 .requestMatchers("/swagger-ui/**").permitAll()
