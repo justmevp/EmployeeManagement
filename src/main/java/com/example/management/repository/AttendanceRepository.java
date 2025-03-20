@@ -26,6 +26,7 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     Integer calculateTotalWorkingHours(@Param("employeeId") Long employeeId, @Param("month") int month,
             @Param("year") int year);
 
+    //Customizing the Result with Spring Data Projection
     @Query("""
                 SELECT a.id AS id, e.name AS employeeName, a.status AS status
                 FROM Attendance a

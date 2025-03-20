@@ -18,4 +18,8 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
             "FROM Department d LEFT JOIN d.employees e " +
             "GROUP BY d.name")
     List<DepartmentDTO> getEmployeeCountByDepartment();
+
+    @Query("SELECT DISTINCT d from Department d LEFT JOIN FETCH d.positions")
+    List<Department> findAllWithPositions();
+
 }

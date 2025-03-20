@@ -1,5 +1,7 @@
 package com.example.management.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +30,7 @@ public class Position {
 
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = false)
+    @JsonBackReference
     private Department department; 
 
 }

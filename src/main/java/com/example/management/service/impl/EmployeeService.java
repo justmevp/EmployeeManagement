@@ -1,8 +1,14 @@
 package com.example.management.service.impl;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import com.example.management.dto.EmployeeDTO;
@@ -18,6 +24,7 @@ import com.example.management.repository.EmployeeRepository;
 import com.example.management.repository.PositionRepository;
 import com.example.management.repository.SalaryRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -52,13 +59,10 @@ public class EmployeeService {
         return EMPLOYEE_MAPPER.toDto(savedEmployee);
     }
 
-
+    @Transactional // Đảm bảo toàn bộ update sẽ rollback nếu có lỗi
     public EmployeeDTO updateEmployee(EmployeeDTO employeeDTO, Long employeeId) {
-        Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
-        if (optionalEmployee.isEmpty()) {
-            throw new RuntimeException("Employee not found");
-        }
-        Employee employee = optionalEmployee.get();
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
         employee.setName(employeeDTO.getName());
         employee.setEmail(employeeDTO.getEmail());
         Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
@@ -67,6 +71,36 @@ public class EmployeeService {
         Position position = positionRepository.findById(employeeDTO.getPositionId())
                 .orElseThrow(() -> new RuntimeException("Position not found"));
         employee.setPosition(position);
-        return EMPLOYEE_MAPPER.toDto(employeeRepository.save(employee));
+        Salary salary = salaryRepository.findSalaryByEmployeeId(employeeId)
+                .orElse(new Salary());
+
+        if (salary.getId() != null) {
+            salary.setOldSalary(salary.getNewSalary());
+        }
+        salary.setNewSalary(employeeDTO.getSalary());
+        salary.setEmployee(employee);
+        salary.setEffectiveDate(LocalDate.now());
+
+        salaryRepository.save(salary);
+        employeeRepository.save(employee);
+
+        return EMPLOYEE_MAPPER.toDto(employee);
     }
+
+    public List<EmployeeDTO> getEmployeesByPosition(String positionName) {
+        return employeeRepository.getEmployeesByPosition(positionName)
+                .stream()
+                .map(EmployeeMapper.INSTANCE::employeeByPosition)
+                .collect(Collectors.toList());
+    }
+
+    public Page<EmployeeDTO> getEmployeesSortedBySalary(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return employeeRepository.findEmployeesWithSalary(pageable);
+    }
+    public Slice<EmployeeDTO> getEmployeesSortedBySalarySlice(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return employeeRepository.findEmployeesWithSalarySlice(pageable);
+    }
+
 }

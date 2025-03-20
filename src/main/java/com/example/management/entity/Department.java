@@ -2,7 +2,7 @@ package com.example.management.entity;
 
 import java.util.List;
 
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -33,6 +33,7 @@ public class Department {
     private String description;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Position> positions; 
 
     @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)

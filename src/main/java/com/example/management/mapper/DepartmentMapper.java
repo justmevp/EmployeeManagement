@@ -1,5 +1,7 @@
 package com.example.management.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -15,5 +17,7 @@ public interface DepartmentMapper {
     DepartmentDTO toDto(Department department);
 
     Department toEntity(DepartmentDTO departmentDTO);
+
+    List<DepartmentDTO> toDtoList(List<Department> departments);
 
 }
