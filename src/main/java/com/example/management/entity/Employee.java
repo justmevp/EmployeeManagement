@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,9 +30,6 @@ public class Employee {
     @Column(name = "email", unique = true)
     private String email;
 
-    @Column(name = "salary")
-    private Double salary;
-
     @Column(name = "hire_date")
     private LocalDate hireDate;
 
@@ -45,5 +43,9 @@ public class Employee {
     @ManyToOne
     @JoinColumn(name = "postition_id")
     private Position position;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private Users user;
 
 }

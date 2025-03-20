@@ -1,7 +1,6 @@
 package com.example.management.config;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 
 import org.springframework.context.annotation.Bean;
@@ -53,8 +52,13 @@ public class SecurityConfig {
                 .addFilterAfter(new JwtTokenGeneratorFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(new JwtTokenValidatiorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests()
-                .requestMatchers("/api/employees/add").hasRole("ADMIN")
+                .requestMatchers("/api/employees/add",
+                 "/api/employees/{employeeId}/update", "/api/total-cost", 
+                 "/api/attendance/leave-requests").hasRole("ADMIN")
+                .requestMatchers("/api/attendance/checkin", "/api/attendance/checkout", "/api/attendance/onleave",
+                "/api/attendance/{employeeId}/working-hours","/api/department/employee-count").hasAnyRole("USER","ADMIN")
                 .requestMatchers("/api/users").authenticated()
+                .requestMatchers("/api/attendance/employee-count").authenticated()
                 .requestMatchers("/api/users/add").permitAll() 
                 .requestMatchers("/welcome").permitAll()
                 .requestMatchers("/swagger-ui/**").permitAll()

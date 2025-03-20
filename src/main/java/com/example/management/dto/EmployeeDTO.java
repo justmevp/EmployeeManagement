@@ -16,5 +16,7 @@ public class EmployeeDTO {
     private Double salary;
     private LocalDate hireDate;
     private Long departmentId;
-    private Long positionId; 
+    private Long positionId;
+    private SalaryDTO salaryDTO;
+ 
 }

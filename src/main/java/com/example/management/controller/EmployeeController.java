@@ -2,8 +2,9 @@ package com.example.management.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -26,6 +27,14 @@ public class EmployeeController {
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<EmployeeDTO> addEmployee(@RequestBody EmployeeDTO employeeDTO) {
-        return ResponseEntity.ok(employeeService.addEmployee(employeeDTO));
+        return ResponseEntity.ok(employeeService.addEmployee(employeeDTO, employeeDTO.getSalaryDTO()));
+    }
+    
+
+    @PutMapping("/{employeeId}/update")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<EmployeeDTO> updateEmployee(@RequestBody EmployeeDTO employeeDTO, 
+    @PathVariable("employeeId") Long employeeId) {
+        return ResponseEntity.ok(employeeService.updateEmployee(employeeDTO, employeeId));
     }
 }

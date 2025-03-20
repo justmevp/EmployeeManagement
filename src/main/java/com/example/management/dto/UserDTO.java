@@ -1,6 +1,5 @@
 package com.example.management.dto;
 
-import com.example.management.util.Role;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
@@ -25,6 +24,8 @@ public class UserDTO {
     @Size(min = 3, max = 20)
     @Schema(description = "UserName", example = "justmeVP", requiredMode = RequiredMode.REQUIRED)
     private String userName;
+
+   
 
 
 }

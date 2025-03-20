@@ -35,7 +35,4 @@ public class Salary {
 
     @Column(name = "effective_date")
     private LocalDate effectiveDate;
-
-    
-
 }

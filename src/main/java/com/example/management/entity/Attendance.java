@@ -1,5 +1,6 @@
 package com.example.management.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.example.management.util.Status;
@@ -32,11 +33,14 @@ public class Attendance {
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    @Column(name = "check_in", nullable = false)
+    @Column(name = "check_in")
     private LocalDateTime checkIn;
 
     @Column(name = "check_out")
     private LocalDateTime checkOut;
+
+    @Column(name = "date", nullable = false)
+    private LocalDate date;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)

@@ -1,5 +1,6 @@
 package com.example.management.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.example.management.entity.Employee;
@@ -19,5 +20,6 @@ public class AttendanceDTO {
     private Employee employee;
     private LocalDateTime checkIn;
     private LocalDateTime checkOut;
+    private LocalDate date;
     private Status status;
 }

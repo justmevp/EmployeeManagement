@@ -2,6 +2,6 @@ package com.example.management.util;
 
 public enum Status {
     
-    PRESENT,LATE,ABSENT;
+    PRESENT,LATE,ABSENT,ONLEAVE;
     
 }
