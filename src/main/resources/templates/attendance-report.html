@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Attendance Report</title>
+</head>
+<body>
+  <h2 th:text="#{email.attendance.report.title}">Attendance Report</h2>
+  <p th:text="'Ngày: ' + ${reportDate}">Date: 2025-03-21</p>
+  <table border="1">
+    <thead>
+      <tr>
+        <th th:text="#{employee.name}">Name</th>
+        <th th:text="#{employee.checkIn}">Check-in</th>
+        <th th:text="#{employee.checkOut}">Check-out</th>
+        <th th:text="#{employee.status}">Status</th> <!-- Thêm cột Status -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="record : ${attendanceRecords}">
+        <td th:text="${record.name}">John Doe</td>
+        <td th:text="${record.checkIn}">08:00</td>
+        <td th:text="${record.checkOut}">17:00</td>
+        <td th:text="${record.status}">Present</td> <!-- Hiển thị status -->
+      </tr>
+    </tbody>
+  </table>
+  <p th:text="#{email.attendance.report.footer}">Chúc một ngày làm việc hiệu quả!</p>
+</body>
+</html>

@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.example.management.dto.AttendanceDTO;
+import com.example.management.dto.AttendanceReportDTO;
 import com.example.management.entity.Attendance;
 import com.example.management.entity.Employee;
 import com.example.management.entity.attendanceinterface.LeaveRequestProjection;
@@ -85,5 +86,9 @@ public class AttendanceService {
     public Integer getTotalWorkingHours(Long employeeId, int month, int year) {
         Integer hours = attendanceRepository.calculateTotalWorkingHours(employeeId, month, year);
         return hours != null ? hours : 0; // Tránh lỗi NullPointer
+    }
+
+      public List<AttendanceReportDTO> getAttendanceRecordsByDate(LocalDate date) {
+        return attendanceRepository.findAttendanceByDate(date);
     }
 }

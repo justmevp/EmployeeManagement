@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.example.management.dto.AttendanceReportDTO;
 import com.example.management.entity.Attendance;
 import com.example.management.entity.attendanceinterface.LeaveRequestProjection;
 import com.example.management.util.Status;
@@ -34,4 +35,9 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
                 WHERE a.status = :status
             """)
     List<LeaveRequestProjection> findLeaveRequests(@Param("status") Status status);
+
+     @Query("SELECT e.name as name, a.checkIn as checkIn, a.checkOut as checkOut, a.status as status " +
+           "FROM Attendance a JOIN a.employee e " +
+           "WHERE a.date = :date")
+    List<AttendanceReportDTO> findAttendanceByDate(@Param("date") LocalDate date);
 }

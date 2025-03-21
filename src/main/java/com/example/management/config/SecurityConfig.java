@@ -55,7 +55,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/employees/add","/api/employees/{employeeId}",
                         "/api/employees/{employeeId}/update", "/api/total-cost",
                         "/api/attendance/leave-requests", "/api/employees/by-position/{positionName}",
-                        "api/employees/sorted-by-salary","api/employees/sorted-by-salary-slice")
+                        "/api/employees/sorted-by-salary","api/employees/sorted-by-salary-slice",
+                        "/api/attendance/send-report")
                 .hasRole("ADMIN")
                 .requestMatchers("/api/attendance/checkin", "/api/attendance/checkout", "/api/attendance/onleave",
                         "/api/attendance/{employeeId}/working-hours", "/api/department/employee-count")
