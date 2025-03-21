@@ -26,6 +26,7 @@ public interface EmployeeMapper {
     @Mapping(target = "salaryDTO", ignore = true)
     EmployeeDTO employeeByPosition(Employee employee);
 
+
     // Ánh xạ từ EmployeeDTO sang Employee:
     // Chúng ta ignore các thuộc tính quan hệ (department, position) vì chúng cần
     // được set riêng trong service.

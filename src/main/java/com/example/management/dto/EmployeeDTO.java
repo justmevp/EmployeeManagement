@@ -21,7 +21,8 @@ public class EmployeeDTO {
     private Long positionId;
     private SalaryDTO salaryDTO;
     private String positionName;
-    
+    private String createdBy;
+
     public EmployeeDTO(Long id, String name, Double salary) {
         this.id = id;
         this.name = name;

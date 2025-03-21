@@ -9,9 +9,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.management.dto.EmployeeDTO;
+import com.example.management.dto.EmployeeDetailsDTO;
 import com.example.management.dto.SalaryDTO;
 import com.example.management.entity.Department;
 import com.example.management.entity.Employee;
@@ -24,7 +27,6 @@ import com.example.management.repository.EmployeeRepository;
 import com.example.management.repository.PositionRepository;
 import com.example.management.repository.SalaryRepository;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -37,6 +39,11 @@ public class EmployeeService {
     private final DepartmentRepository departmentRepository;
 
     private final PositionRepository positionRepository;
+
+    @Transactional(readOnly = true)
+    public EmployeeDetailsDTO getEmployeeDetailsById(Long id) {
+        return employeeRepository.findEmployeeDetailsById(id);
+    }
 
     public EmployeeDTO addEmployee(EmployeeDTO employeeDTO, SalaryDTO salaryDTO) {
         if (employeeRepository.existsByEmail(employeeDTO.getEmail())) {
@@ -59,7 +66,7 @@ public class EmployeeService {
         return EMPLOYEE_MAPPER.toDto(savedEmployee);
     }
 
-    @Transactional // Đảm bảo toàn bộ update sẽ rollback nếu có lỗi
+    @Transactional 
     public EmployeeDTO updateEmployee(EmployeeDTO employeeDTO, Long employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
@@ -98,6 +105,7 @@ public class EmployeeService {
         Pageable pageable = PageRequest.of(page, size);
         return employeeRepository.findEmployeesWithSalary(pageable);
     }
+
     public Slice<EmployeeDTO> getEmployeesSortedBySalarySlice(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return employeeRepository.findEmployeesWithSalarySlice(pageable);

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.management.constant.EndpointConstant;
 import com.example.management.dto.EmployeeDTO;
+import com.example.management.dto.EmployeeDetailsDTO;
 import com.example.management.service.impl.EmployeeService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,6 +35,11 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<EmployeeDTO> addEmployee(@RequestBody EmployeeDTO employeeDTO) {
         return ResponseEntity.ok(employeeService.addEmployee(employeeDTO, employeeDTO.getSalaryDTO()));
+    }
+
+    @GetMapping("/{employeeId}")
+    public ResponseEntity<EmployeeDetailsDTO> getEmployeeDetails(@PathVariable("employeeId") Long id) {
+        return ResponseEntity.ok(employeeService.getEmployeeDetailsById(id));
     }
 
     @PutMapping("/{employeeId}/update")

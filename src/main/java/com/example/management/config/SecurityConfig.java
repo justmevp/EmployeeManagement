@@ -52,7 +52,7 @@ public class SecurityConfig {
                 .addFilterAfter(new JwtTokenGeneratorFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(new JwtTokenValidatiorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests()
-                .requestMatchers("/api/employees/add",
+                .requestMatchers("/api/employees/add","/api/employees/{employeeId}",
                         "/api/employees/{employeeId}/update", "/api/total-cost",
                         "/api/attendance/leave-requests", "/api/employees/by-position/{positionName}",
                         "api/employees/sorted-by-salary","api/employees/sorted-by-salary-slice")
